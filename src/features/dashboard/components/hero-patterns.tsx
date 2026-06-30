@@ -7,10 +7,10 @@ export function HeroPattern() {
         colors={["#2DD4BF", "#22D3EE", "#38BDF8", "#818CF8"]}
         backgroundFill='hsl(0 0% 100%)'
         blur={3}
-        speed='slow'
+        speed='fast'
         waveOpacity={0.1}
         waveWidth={60}
-        waveYOffset={250}
+        waveYOffset={5}
         containerClassName='h-full'
         className='hidden'
       />
