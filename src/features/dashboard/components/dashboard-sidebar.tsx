@@ -105,6 +105,7 @@ export function DashboardSIdebar() {
     {
       title: "Text to speech",
       icon: Volume2,
+      url:'/text-to-speech'
     },
   ];
 
