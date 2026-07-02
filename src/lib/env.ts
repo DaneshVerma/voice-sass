@@ -5,6 +5,10 @@ export const env = createEnv({
   server: {
     DATABASE_URL: z.string().min(1),
     APP_URL: z.string(),
+    R2_ACCOUNT_ID: z.string(),
+    R2_ACCESS_KEY_ID: z.string(),
+    R2_SECRET_ACCESS_KEY: z.string(),
+    R2_BUCKET_NAME: z.string(),
   },
   experimental__runtimeEnv: {},
   skipValidation: !!process.env.SKIP_ENV_VALIDATION,

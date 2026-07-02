@@ -29,6 +29,7 @@ enum VoiceCategory {
   PODCAST
   VOICEOVER
   CORPORATE
+  ADVERTISING
 }
 
 model Voice {
