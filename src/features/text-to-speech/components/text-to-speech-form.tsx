@@ -12,9 +12,9 @@ const ttsFormSchema = z.object({
   repetitionPenalty: z.number(),
 });
 
-export type TTFormValues = z.infer<typeof ttsFormSchema>;
+export type TTSFormValues = z.infer<typeof ttsFormSchema>;
 
-export const defaultTTSValues: TTFormValues = {
+export const defaultTTSValues: TTSFormValues = {
   text: "",
   voiceId: "",
   tempreture: 0.8,
@@ -32,7 +32,7 @@ export function TextToSpeechForm({
   defaultValues,
 }: {
   children: React.ReactNode;
-  defaultValues?: TTFormValues;
+  defaultValues?: TTSFormValues;
 }) {
   const form = useAppForm({
     ...ttsFormOptions,

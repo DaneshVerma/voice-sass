@@ -1,8 +1,8 @@
 import z from "zod";
 import { prisma } from "@/lib/database";
-import { createTRPCRouter, orgProcedure } from "../init.js";
+import { createTRPCRouter, orgProcedure } from "../init";
 import { TRPCError } from "@trpc/server";
-import { deleteAudio } from "@/lib/r2.js";
+import { deleteAudio } from "@/lib/r2";
 
 export const voicesRouter = createTRPCRouter({
   getAll: orgProcedure
@@ -48,6 +48,7 @@ export const voicesRouter = createTRPCRouter({
             createdAt: true,
             updatedAt: true,
             variant: true,
+            category: true,
           },
         }),
         prisma.voice.findMany({
@@ -60,13 +61,14 @@ export const voicesRouter = createTRPCRouter({
             id: true,
             name: true,
             description: true,
-            category: true,
-            language: true,
+            createdAt: true,
+            updatedAt: true,
             variant: true,
+            category: true,
           },
         }),
       ]);
-      return [...system, ...custom];
+      return { system, custom };
     }),
   delete: orgProcedure
     .input(z.object({ id: z.string() }))
