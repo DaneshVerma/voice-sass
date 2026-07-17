@@ -25,7 +25,7 @@ type UploadAudioOptions = {
 export async function uploadAudio({
   buffer,
   key,
-  contentType,
+  contentType = "audio/wav",
 }: UploadAudioOptions): Promise<void> {
   await r2.send(
     new PutObjectCommand({

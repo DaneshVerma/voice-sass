@@ -83,6 +83,7 @@ export const generationsRouter = createTRPCRouter({
         parseAs: "arrayBuffer",
       });
       if (error) {
+        console.log("chatterBox err--> ", error);
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
           message: "Failed to generate audio",
@@ -124,7 +125,7 @@ export const generationsRouter = createTRPCRouter({
             dataObjectKey,
           },
         });
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (_err) {
         if (generationId) {
           await prisma.generations
