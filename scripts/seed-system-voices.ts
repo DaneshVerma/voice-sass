@@ -227,6 +227,7 @@ async function seedSystemVoice(name: string) {
         category: meta.category,
         language: meta.language,
       }),
+      dataObjectKey: "PENDING_UPLOAD",
     },
     select: {
       id: true,
