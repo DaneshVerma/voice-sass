@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState, useEffect } from "react";
-import { Pause, Play } from "lucide-react";
+import { Download, Pause, Play } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { VoiceAvatar } from "@/components/voice-avatar/voice-avatar";
@@ -65,6 +65,22 @@ export function VoicePreviewMobilePanel({
     else audio.play();
   };
 
+  const handleDownload = () => {
+    const safeName =
+      text
+        .slice(0, 50)
+        .trim()
+        .replace(/[^a-zA-Z0-9]+/g, "-")
+        .replace(/^-|-$/g, "")
+        .toLocaleLowerCase() || "speech";
+
+    const link = document.createElement("a");
+    link.href = audioUrl;
+    link.download = `${safeName}.wav`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
   if (!audioUrl) return null;
 
   return (
@@ -85,6 +101,9 @@ export function VoicePreviewMobilePanel({
           )}
         </div>
         <div className='flex items-center gap-2'>
+          <Button variant={"ghost"} size={"icon"} onClick={handleDownload} >
+            <Download className="size-4"/>
+          </Button>
           <Button
             variant={"default"}
             size={"icon"}

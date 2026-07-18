@@ -1,6 +1,8 @@
 """Chatterbox TTS API - Text-to-speech with voice cloning on Modal."""
 
+import os
 import modal
+from dotenv import load_dotenv
 
 # Use this to add R2 tokens:
 # modal secret create cloudflare-r2 \
@@ -19,9 +21,12 @@ import modal
 #   -d '{"prompt": "Hello from Chatterbox [chuckle].", "voice_key": "voices/system/<voice-id>"}' \
 #   --output output.wav
 
+#  loading .env variables from local .env file
+load_dotenv()
+
 # R2 cloud bucket mount (read-only, replaces Modal Volume)
-R2_BUCKET_NAME = "roons-voices"
-R2_ACCOUNT_ID = "c76f953cfcfce653ce67e29a158ee5c7"
+R2_BUCKET_NAME = os.environ["R2_BUCKET_NAME"]
+R2_ACCOUNT_ID = os.environ["R2_ACCOUNT_ID"]
 R2_MOUNT_PATH = "/r2"
 r2_bucket = modal.CloudBucketMount(
     R2_BUCKET_NAME,
@@ -183,7 +188,7 @@ def test(
 ):
     import pathlib
 
-    chatterbox = Chatterbox() #type:ignore
+    chatterbox = Chatterbox()  # type: ignore
     audio_prompt_path = f"{R2_MOUNT_PATH}/{voice_key}"
     audio_bytes = chatterbox.generate.remote(
         prompt=prompt,
