@@ -9,6 +9,11 @@ import { ttsFormOptions } from "./text-to-speech-form";
 import { useSelector } from "@tanstack/react-store";
 import { GenerateButton } from "./generate-button";
 
+import { SettingsDrawer } from "./settings-drawer";
+import { HistoryDrawer } from "./history-drawer";
+import { VoiceSelectorButton } from "./voice-selector-button";
+import { PromptSuggestions } from "./prompt-suggestions";
+
 export function TextInputPanel() {
   const form = useTypedAppFormContext(ttsFormOptions);
   const text = useSelector(form.store, (s) => s.values.text);
@@ -41,6 +46,12 @@ export function TextInputPanel() {
       <div className='shrink-0 p-4 lg:p-6'>
         {/* Mobile  */}
         <div className='flex flex-col gap-3 lg:hidden'>
+          <div className='flex items-center gap-2'>
+            <SettingsDrawer>
+              <VoiceSelectorButton />
+            </SettingsDrawer>
+            <HistoryDrawer />
+          </div>
           <GenerateButton
             className='w-full'
             disabled={isSubmitting}
@@ -79,9 +90,11 @@ export function TextInputPanel() {
           </div>
         ) : (
           <div className='hidden lg:block'>
-            <p className='text-sm text-muted-foreground'>
-              Get started by typing or pasting text above
-            </p>
+            <PromptSuggestions
+              onSelect={(prompt) => {
+                form.setFieldValue("text", prompt);
+              }}
+            />
           </div>
         )}
       </div>
