@@ -1,23 +1,24 @@
-import { useQueryState } from "nuqs";
 import { useState } from "react";
+import { useQueryState } from "nuqs";
 import { useDebouncedCallback } from "use-debounce";
-import { voicesSearchParams } from "../lib/params";
+import { Search, Sparkles } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
 import {
   InputGroup,
-  InputGroupAddon,
   InputGroupInput,
+  InputGroupAddon,
 } from "@/components/ui/input-group";
-import { Search, Sparkles } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { voicesSearchParams } from "@/features/voices/lib/params";
+import { VoiceCreateDialog } from "./voice-create-dialog";
 
 export function VoicesToolbar() {
   const [query, setQuery] = useQueryState("query", voicesSearchParams.query);
-
   const [localQuery, setLocalQuery] = useState(query);
 
   const debouncedSetQuery = useDebouncedCallback(
     (value: string) => setQuery(value),
-    300,
+    200,
   );
 
   return (
@@ -27,13 +28,14 @@ export function VoicesToolbar() {
           All Libraries
         </h2>
         <p className='text-sm text-muted-foreground'>
-          Discover Your Voices, or make your own{" "}
+          Discover your voices, or make your own
         </p>
       </div>
+
       <div className='flex flex-col gap-3'>
         <div className='flex items-center gap-3'>
-          <InputGroup>
-            <InputGroupAddon className='lg:max-w-sm'>
+          <InputGroup className='lg:max-w-sm'>
+            <InputGroupAddon>
               <Search className='size-4' />
             </InputGroupAddon>
             <InputGroupInput
@@ -46,16 +48,20 @@ export function VoicesToolbar() {
             />
           </InputGroup>
           <div className='ml-auto hidden lg:block'>
-            <Button size={"sm"}>
-              <Sparkles />
-              Custom voice
-            </Button>
+            <VoiceCreateDialog>
+              <Button size='sm'>
+                <Sparkles />
+                Custom voice
+              </Button>
+            </VoiceCreateDialog>
           </div>
           <div className='lg:hidden'>
-            <Button size={"sm"} className='w-full'>
-              <Sparkles />
-              Custom voice
-            </Button>
+            <VoiceCreateDialog>
+              <Button size='sm' className='w-full'>
+                <Sparkles />
+                Custom voice
+              </Button>
+            </VoiceCreateDialog>
           </div>
         </div>
       </div>

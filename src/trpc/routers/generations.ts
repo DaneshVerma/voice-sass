@@ -63,7 +63,7 @@ export const generationsRouter = createTRPCRouter({
           dataObjectKey: true,
         },
       });
-      if (!voice) {
+      if (!voice || !voice.dataObjectKey) {
         throw new TRPCError({
           code: "NOT_FOUND",
           message: "Voice not available",

@@ -42,7 +42,7 @@ model Voice {
   category      VoiceCategory @default(GENERAL)
   language      String        @default("en-US")
   variant       VoiceVariant
-  dataObjectKey String
+  dataObjectKey String?
 
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
