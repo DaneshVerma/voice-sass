@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 import { Geist_Mono, Inter } from "next/font/google";
 import { Toaster } from "@/components/ui/sonner";
 import { ClerkProvider } from "@clerk/nextjs";
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { TRPCReactProvider } from "@/trpc/client";
-import {shadcn,} from '@clerk/themes'
+import { shadcn } from "@clerk/themes";
 import "./globals.css";
 
 const inter = Inter({
@@ -32,19 +33,16 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider
-      appearance={
-        {
-          theme: shadcn
-         
-        }
-      }
+      appearance={{
+        theme: shadcn,
+      }}
     >
       <TRPCReactProvider>
         <html lang='en'>
           <body
             className={`${inter.variable} ${geistMono.variable} antialiased`}
           >
-            {children}
+            <NuqsAdapter>{children}</NuqsAdapter>
             <Toaster />
           </body>
         </html>

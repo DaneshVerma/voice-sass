@@ -87,7 +87,7 @@ function NavSection({ lable, items, pathname }: NavSectionProps) {
   );
 }
 
-export function DashboardSIdebar() {
+export function DashboardSidebar() {
   const pathName = usePathname();
   const clerk = useClerk();
 
