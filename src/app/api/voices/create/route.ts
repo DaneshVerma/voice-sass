@@ -18,6 +18,7 @@ const MAX_UOLOAD_SIZE_BYTES = 20 * 1024 * 1024; // 20 MB
 const MIN_AUDIO_DURATION_SECONDS = 10;
 
 export async function POST(request: Request) {
+  console.log("yaha aii hai------->");
   const { userId, orgId } = await auth();
 
   if (!userId || !orgId) {

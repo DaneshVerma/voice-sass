@@ -2,7 +2,7 @@
 
 import { Field, FieldError } from "@/components/ui/field";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { cn, formateFileSize } from "@/lib/utils";
+import { cn, formatFileSize } from "@/lib/utils";
 import { useTRPC } from "@/trpc/client";
 import { useForm } from "@tanstack/react-form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -55,6 +55,7 @@ import {
   CommandList,
 } from "@/components/ui/command";
 import { useAudioPlayback } from "@/hooks/use-audio-playback";
+import { VoiceRecorder } from "./voice-recorder";
 
 const LANGUAGE_OPTIONS = locales.all
   .filter((l) => l.tag && l.tag.includes("-") && l.name)
@@ -105,7 +106,7 @@ function FileDropzone({
         <div className='min-w-0 flex-1'>
           <p className='truncate text-sm font-medium'>{file.name}</p>
           <p className='text-xs text-muted-foreground'>
-            {formateFileSize(file.size)}
+            {formatFileSize(file.size)}
           </p>
         </div>
 
@@ -368,11 +369,11 @@ export function VoiceCreateForm({
                     />
                   </TabsContent>
                   <TabsContent value='record'>
-                    {/* <VoiceRecorder
+                    <VoiceRecorder
                       file={field.state.value}
                       onFileChange={field.handleChange}
                       isInvalid={isInvalid}
-                    /> */}
+                    />
                   </TabsContent>
                 </Tabs>
                 {isInvalid && <FieldError errors={field.state.meta.errors} />}
