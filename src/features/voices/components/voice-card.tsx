@@ -1,5 +1,7 @@
 import Link from "next/link";
-import { Mic, MoreHorizontal, Pause, Play } from "lucide-react";
+import { Mic, MoreHorizontal, Pause, Play, Trash2 } from "lucide-react";
+import { toast } from "sonner";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -15,6 +17,18 @@ import type { AppRouter } from "@/trpc/routers/_app";
 import { VOICE_CATEGORY_LABELS } from "@/features/voices/data/voice-categories";
 import Image from "next/image";
 import { useAudioPlayback } from "@/hooks/use-audio-playback";
+import { useTRPC } from "@/trpc/client";
+import { useState } from "react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 export type VoiceItem =
   inferRouterOutputs<AppRouter>["voices"]["getAll"]["custom"][number];
@@ -43,9 +57,26 @@ function parseLanguage(locale: string) {
   return { flagUrl, region };
 }
 export function VoiceCard({ voice }: VoiceCardProps) {
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const { flagUrl, region } = parseLanguage(voice.language);
 
   const audioSrc = `/api/voices/${encodeURIComponent(voice.id)}`;
+
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+  const deleteMutation = useMutation(
+    trpc.voices.delete.mutationOptions({
+      onSuccess: () => {
+        toast.success("Voice deleted successfully");
+        queryClient.invalidateQueries({
+          queryKey: trpc.voices.getAll.queryKey(),
+        });
+      },
+      onError: (error) => {
+        toast.error(error.message ?? "Failed to delete voice");
+      },
+    }),
+  );
 
   const { isPlaying, isLoading, togglePlay } = useAudioPlayback(audioSrc);
   return (
@@ -123,8 +154,51 @@ export function VoiceCard({ voice }: VoiceCardProps) {
                 <span className='font-medium'>Use this voice</span>
               </Link>
             </DropdownMenuItem>
+            {voice.variant === "CUSTOM" && (
+              <DropdownMenuItem
+                onClick={() => setShowDeleteDialog(true)}
+                className='text-destructive focus:text-destructive'
+              >
+                <Trash2 className='size-4 text-destructive' />
+                <span className='font-medium'>Delete Voice</span>
+              </DropdownMenuItem>
+            )}
           </DropdownMenuContent>
         </DropdownMenu>
+        {voice.variant === "CUSTOM" && (
+          <AlertDialog
+            open={showDeleteDialog}
+            onOpenChange={setShowDeleteDialog}
+          >
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Delete Voice</AlertDialogTitle>
+                <AlertDialogDescription>
+                  Are you sure you want to delete &quot;{voice.name}&quot;?This
+                  action cannot be undone.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel disabled={deleteMutation.isPending}>
+                  Cancel
+                </AlertDialogCancel>
+                <AlertDialogAction
+                  variant={"destructive"}
+                  disabled={deleteMutation.isPending}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    deleteMutation.mutate(
+                      { id: voice.id },
+                      { onSuccess: () => setShowDeleteDialog(false) },
+                    );
+                  }}
+                >
+                  {deleteMutation.isPending ? "Deleting..." : "Delete"}
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>  
+        )}
       </div>
     </div>
   );
