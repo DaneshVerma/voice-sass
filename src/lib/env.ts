@@ -4,6 +4,9 @@ import { createEnv } from "@t3-oss/env-nextjs";
 export const env = createEnv({
   server: {
     DATABASE_URL: z.string().min(1),
+    POLAR_ACCESS_TOKEN: z.string().min(1),
+    POLAR_SERVER: z.enum(["sandbox", "production"]).default("sandbox"),
+    POLAR_PRODUCT_ID: z.string().min(1),
     APP_URL: z.string(),
     R2_ACCOUNT_ID: z.string(),
     R2_ACCESS_KEY_ID: z.string(),
