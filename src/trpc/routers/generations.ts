@@ -181,7 +181,7 @@ export const generationsRouter = createTRPCRouter({
         .ingest({
           events: [
             {
-              name: "tts-generation",
+              name: "tts_generation",
               externalCustomerId: ctx.orgId,
               metadata: { characters: input.text.length },
               timestamp: new Date(),
